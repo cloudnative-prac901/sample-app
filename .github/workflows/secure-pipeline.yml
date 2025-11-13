@@ -1,4 +1,4 @@
-name: CodeQL Analysis
+name: Secure DevSecOps Pipeline
 
 on:
   push:
@@ -7,12 +7,18 @@ on:
     branches: [main]
 
 permissions:
-  actions: read
   contents: read
-  security-events: write
+  security-events: write  # CodeQL 用
+
+env:
+  AWS_REGION: ap-northeast-1
+  ECR_REPOSITORY: sample-app
+  IMAGE_TAG: latest
 
 jobs:
-  analyze:
+  # ===== 1. CodeQL（Python SAST）===== #
+  codeql:
+    name: CodeQL Analysis
     runs-on: ubuntu-latest
 
     steps:
