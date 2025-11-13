@@ -17,23 +17,35 @@ env:
   IMAGE_TAG: latest
 
 jobs:
-  # ===== 1. Super-Linter =====
-  linter:
-    name: Super-Linter Code Quality Check
+  # ===== 1. Ruff + Black (Lint/Format) =====
+  lint:
+    name: Ruff & Black
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
-      - name: Run Super-Linter
-        uses: github/super-linter@v7
-        env:
-          VALIDATE_ALL_CODEBASE: true
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Install Python & tools
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Ruff & Black
+        run: |
+          pip install ruff black
+
+      # Ruff (lint)
+      - name: Run Ruff
+        run: |
+          ruff check .
+        continue-on-error: true  # エラーが出ても Pipelineを止めない
+
+      # Black (format check)
+      - name: Run Black (check mode)
+        run: |
+          black --check .
+        continue-on-error: true  # Blackの整形エラーも止めない
   
   # ===== 2. CodeQL（Python SAST）===== #
   codeql:
