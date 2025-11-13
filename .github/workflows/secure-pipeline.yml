@@ -37,15 +37,10 @@ jobs:
 
       # Ruff (lint)
       - name: Run Ruff
-        run: |
-          ruff check .
-        continue-on-error: true  # エラーが出ても Pipelineを止めない
-
+        run: ruff check . || true   # Ruff failed しても後続に進む
       # Black (format check)
       - name: Run Black (check mode)
-        run: |
-          black --check .
-        continue-on-error: true  # Blackの整形エラーも止めない
+        run: black --check . || true  # Black が exit 1 を返しても後続に進む
   
   # ===== 2. CodeQL（Python SAST）===== #
   codeql:
