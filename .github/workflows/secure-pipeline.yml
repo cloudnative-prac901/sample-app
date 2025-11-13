@@ -51,7 +51,7 @@ jobs:
   codeql:
     name: CodeQL Analysis
     runs-on: ubuntu-latest
-    needs: linter   # Linter通過後に実行
+    needs: lint   # Linter通過後に実行
     
     steps:
       - name: Checkout code
