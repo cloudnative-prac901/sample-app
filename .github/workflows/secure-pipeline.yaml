@@ -57,7 +57,7 @@ jobs:
         run: black --check . || true  # Black が exit 1 を返しても後続に進む
 
 # ===== 3. SAST（CodeQL）===== #
-  codeql:
+  sast:
     name: CodeQL Analysis
     runs-on: ubuntu-latest
     needs: format   # format成功後に実行
@@ -81,7 +81,7 @@ jobs:
   build_scan_push:
     name: Build, Scan and Push
     runs-on: ubuntu-latest
-    needs: codeql  # CodeQL成功後に実行
+    needs: sast  # sast成功後に実行
     if: github.ref == 'refs/heads/main'
 
     steps:
