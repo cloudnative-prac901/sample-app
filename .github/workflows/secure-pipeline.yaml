@@ -55,3 +55,24 @@ jobs:
 
       - name: Run Black (check mode)
         run: black --check . || true  # Black が exit 1 を返しても後続に進む
+
+# ===== 3. SAST（CodeQL）===== #
+  sast:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    needs: format   # format成功後に実行
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: python
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
