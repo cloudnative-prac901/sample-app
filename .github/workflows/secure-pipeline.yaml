@@ -35,3 +35,23 @@ jobs:
 
       - name: Run Ruff Lint
         run: ruff check . || true  # ruff が failed を返しても後続に進む
+
+# ===== 2. Format（Black）===== #
+  format:
+    name: Black Format Check
+    runs-on: ubuntu-latest
+    needs: lint   # lint成功後に実行
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Black
+        run: pip install black
+
+      - name: Run Black (check mode)
+        run: black --check . || true  # Black が exit 1 を返しても後続に進む
